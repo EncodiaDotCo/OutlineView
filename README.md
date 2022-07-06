@@ -7,6 +7,8 @@ This package contains an `OutlineView` that does just that. It is not the pretti
 
 Example use:
 
+<img width="699" alt="outline_test_screenshot" src="https://user-images.githubusercontent.com/108823282/177617571-cbb47cb3-eb57-4b11-a86e-c946b230ae15.png">
+
 ```swift
 
 
@@ -73,6 +75,7 @@ final class Thing: TreeNodeProtocol {
     }
     private var _children: [Thing]? = nil
 }
+
 
 
 
