@@ -9,8 +9,8 @@ import os
 
 #if os(macOS)
 
-private let log = os.Logger(subsystem: "", category: "OutlineView")
-// private let log = os.Logger(OSLog.disabled)
+// private let log = os.Logger(subsystem: "", category: "OutlineView")
+private let log = os.Logger(OSLog.disabled)
 
 /// The model for an ``OutlineView`` is a tree of objects that implement this protocol.
 ///
