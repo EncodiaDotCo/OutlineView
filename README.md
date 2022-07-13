@@ -7,7 +7,8 @@ This package contains an `OutlineView` that does just that. It is not the pretti
 
 Example use:
 
-<img width="699" alt="outline_test_screenshot" src="https://user-images.githubusercontent.com/108823282/177617571-cbb47cb3-eb57-4b11-a86e-c946b230ae15.png">
+<img width="685" alt="outline_test_screenshot2" src="https://user-images.githubusercontent.com/108823282/178790752-196e4b4b-14c2-4857-b42c-2bdcd4b18ffd.png">
+
 
 ```swift
 
