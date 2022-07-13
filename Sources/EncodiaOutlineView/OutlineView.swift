@@ -12,24 +12,6 @@ import os
 // private let log = os.Logger(subsystem: "", category: "OutlineView")
 private let log = os.Logger(OSLog.disabled)
 
-/// The model for an ``OutlineView`` is a tree of objects that implement this protocol.
-///
-///
-@MainActor public protocol TreeNodeProtocol: Identifiable, ObservableObject {
-    associatedtype Child: TreeNodeProtocol
-
-    /// True if the node _might_ have children. For example, nodes representing a folder in a file system hierachy would return true. A file in that example would return false.
-    /// The ``OutlineView`` will render an expand/collapse icon for items that can have children.
-    var canHaveChildren: Bool { get }
-    
-    /// This allows for an asynchronous `children` property. Imagine a folder that needs to read from a server. `canHaveChildren` is true, the user clicks to
-    /// expand the node, but `children` can't immediately give an answer, so `children` would return `[]` after starting an internal process and publish a change to
-    /// this `isLoadingChildren` property.  This should appear in the UI as some kind of progress indicator, showing the user that the app is fetching the child list from somewhere.
-    var isLoadingChildren: Bool { get }
-    
-    var children: [Child] { get }
-}
-
 private let selectionColor = Color(.init(deviceRed: 0.5, green: 0.5, blue: 1.0, alpha: 0.5))
 
 /// Helper for ``OutlineNodeView``
@@ -47,8 +29,10 @@ private struct ChevronOrSpace: View {
             // in the debugger. But from a frame here... ??
             if isExpanded {
                 Image(systemName: "chevron.down").frame(width: frameWidth)
+                    .transition(.identity)
             } else {
                 Image(systemName: "chevron.right").frame(width: frameWidth)
+                    .transition(.identity)
             }
         } else {
             // Image(systemName: "circle.fill").scaleEffect(0.5)
@@ -100,12 +84,22 @@ struct OutlineNodeView<Node, ContentView>: View
             .gesture(TapGesture().modifiers(.command).onEnded { commandTapGesture() })
             .onTapGesture { plainTapGesture() }
             .background(selection.contains(node) ? selectionColor : nil)
-            if isExpanded, let kids = node.children {
-                ForEach(kids) { subNode in
-                    OutlineNodeView(node: subNode, depth:depth+1, expansion: $expansion, selection: selection, onNodeClick: onNodeClick, content: content)
-                        .padding(.leading, 18)
+            VStack(spacing: 0) {
+                if isExpanded, let kids = node.children {
+                    VStack(spacing: 0) {
+                        ForEach(kids) { subNode in
+                            OutlineNodeView(node: subNode, depth:depth+1, expansion: $expansion, selection: selection, onNodeClick: onNodeClick, content: content)
+                                .padding(.leading, 18)
+                        }
+                    }
+                    // .border(Color.red, width: 1)
+                    .transition(.move(edge: .top))
+                } else {
+                    // Needed to get the move-in-from-top transition animation to work. I don't know why.
+                    Color.clear.frame(height: 0)
                 }
             }
+            .clipped()
         }
     }
     
@@ -142,8 +136,7 @@ struct OutlineNodeView<Node, ContentView>: View
     }
     
     private func toggleExpansion(_ id: Node.ID) {
-        print("Toggle")
-        withAnimation {
+        withAnimation(.linear(duration: 0.2)) {
             if expansion.contains(id) { expansion.remove(id) }
             else { expansion.insert(id) }
         }
