@@ -80,12 +80,13 @@ final class Thing: TreeNodeProtocol {
 
 ```
 
-Here's another example that uses lazy loading to view the filesystem.
+Here's another example that uses lazy loading to view the filesystem. If you try this example out in Xcode, you might need to disable the sandbox under the "Signing and Capabilities" tab for your target.
 
 
 ```swift
 struct FileSystemView: View {
     
+    var fileSystemRoots = [FileSystemNode(url: URL(fileURLWithPath: "/"))]
     @StateObject var selection = OutlineViewSingleSelectionModel<FileSystemNode>()
     // @StateObject var selection = OutlineViewMultiSelectionModel<Thing>()
     @State var expansion: Set<URL> = []
@@ -95,7 +96,7 @@ struct FileSystemView: View {
         HStack(spacing: 0) {
             ScrollView {
                 // OutlineView(roots: roots, expansion: $expansion) { node in
-                OutlineView(roots: AppModel.shared.fileSystemRoots, selection: selection, expansion: $expansion, onNodeClick: onNodeClick) { node in
+                OutlineView(roots: fileSystemRoots, selection: selection, expansion: $expansion, onNodeClick: onNodeClick) { node in
                     Text(node.name)
                 }
             }
