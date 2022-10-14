@@ -83,7 +83,7 @@ final class Thing: TreeNodeProtocol {
 Here's another example that uses lazy loading to view the filesystem.
 
 
-```
+```swift
 struct FileSystemView: View {
     
     @StateObject var selection = OutlineViewSingleSelectionModel<FileSystemNode>()
