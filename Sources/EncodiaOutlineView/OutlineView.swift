@@ -86,7 +86,7 @@ struct OutlineNodeView<Node, ContentView>: View
             .background(selection.contains(node) ? selectionColor : nil)
             VStack(spacing: 0) {
                 if isExpanded, let kids = node.children {
-                    VStack(spacing: 0) {
+                    LazyVStack(spacing: 0) {
                         ForEach(kids) { subNode in
                             OutlineNodeView(node: subNode, depth:depth+1, expansion: $expansion, selection: selection, onNodeClick: onNodeClick, content: content)
                                 .padding(.leading, 18)
@@ -244,7 +244,7 @@ public struct OutlineView<Node, ContentView>: View where Node: TreeNodeProtocol,
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
+        LazyVStack(spacing: 0) {
             ForEach(roots) { root in
                 OutlineNodeView(node: root, depth: 0, expansion: $expansion, selection: selection, onNodeClick: onNodeClick, content: content)
             }
